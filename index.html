@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦌 Get Me Out of Alaska! — Clint & Mike's Escape Plan</title>
+    <meta name="description" content="Help Clint and Mike Lippy escape Alaska! Find alternate flights and play a moose escape game while you wait.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Aurora Background -->
+    <div class="aurora-bg">
+        <div class="aurora-layer aurora-1"></div>
+        <div class="aurora-layer aurora-2"></div>
+        <div class="aurora-layer aurora-3"></div>
+    </div>
+
+    <!-- Snowfall -->
+    <div id="snowfall"></div>
+
+    <!-- Main App -->
+    <div id="app">
+        <!-- Hero / Landing -->
+        <header id="hero">
+            <div class="hero-badge">⚠️ STRANDED IN ALASKA ⚠️</div>
+            <h1 class="hero-title">GET <span class="highlight">CLINT</span> &amp; <span class="highlight">MIKE LIPPY</span> OUT!</h1>
+            <p class="hero-subtitle">Their pilot timed out. They're stuck. We're fixing this.</p>
+            <div class="hero-cards">
+                <button class="feature-card" id="btn-flights" onclick="switchTab('flights')">
+                    <div class="card-icon">✈️</div>
+                    <h2>Find Flights</h2>
+                    <p>Search alternate routes out of Alaska</p>
+                </button>
+                <button class="feature-card" id="btn-game" onclick="switchTab('game')">
+                    <div class="card-icon">🦌</div>
+                    <h2>Moose Escape</h2>
+                    <p>Dodge moose to pass the time</p>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav id="tab-nav" class="hidden">
+            <button class="tab-btn active" data-tab="flights" onclick="switchTab('flights')">✈️ Flight Finder</button>
+            <button class="tab-btn" data-tab="game" onclick="switchTab('game')">🦌 Moose Escape</button>
+            <button class="tab-btn tab-home" onclick="goHome()">🏠</button>
+        </nav>
+
+        <!-- Flight Finder Section -->
+        <section id="flights-section" class="section hidden">
+            <div class="section-header">
+                <h2>🛫 Alternate Flight Finder</h2>
+                <p>Let's get Clint & Mike on the next flight outta here</p>
+            </div>
+            <div class="search-form glass-panel">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="departure">Departing From</label>
+                        <select id="departure">
+                            <option value="ANC">Anchorage (ANC)</option>
+                            <option value="FAI">Fairbanks (FAI)</option>
+                            <option value="JNU">Juneau (JNU)</option>
+                            <option value="SIT">Sitka (SIT)</option>
+                            <option value="KTN">Ketchikan (KTN)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <select id="destination">
+                            <option value="SEA">Seattle (SEA)</option>
+                            <option value="PDX">Portland (PDX)</option>
+                            <option value="SFO">San Francisco (SFO)</option>
+                            <option value="LAX">Los Angeles (LAX)</option>
+                            <option value="DEN">Denver (DEN)</option>
+                            <option value="MSP">Minneapolis (MSP)</option>
+                            <option value="ORD">Chicago (ORD)</option>
+                            <option value="DFW">Dallas (DFW)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date">
+                    </div>
+                    <div class="form-group">
+                        <label for="passengers">Passengers</label>
+                        <select id="passengers">
+                            <option value="2" selected>2 (Clint & Mike)</option>
+                            <option value="1">1</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-search" id="search-btn" onclick="searchFlights()">
+                    🔍 Search Flights — GET THEM OUT!
+                </button>
+            </div>
+
+            <div id="flight-results" class="hidden">
+                <div class="results-header">
+                    <h3 id="results-title"></h3>
+                    <span class="results-count" id="results-count"></span>
+                </div>
+                <div id="flight-list"></div>
+            </div>
+        </section>
+
+        <!-- Moose Escape Game Section -->
+        <section id="game-section" class="section hidden">
+            <div class="section-header">
+                <h2>🦌 Moose Escape!</h2>
+                <p>Help Clint & Mike outrun the moose while they wait for their flight</p>
+            </div>
+            <div class="game-container glass-panel">
+                <div class="game-hud">
+                    <div class="hud-item">
+                        <span class="hud-label">DISTANCE</span>
+                        <span class="hud-value" id="score">0</span>
+                        <span class="hud-unit">m</span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-label">HIGH SCORE</span>
+                        <span class="hud-value" id="high-score">0</span>
+                        <span class="hud-unit">m</span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-label">SPEED</span>
+                        <span class="hud-value" id="speed">0</span>
+                        <span class="hud-unit">mph</span>
+                    </div>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="game-canvas" width="800" height="400"></canvas>
+                    <div id="game-overlay" class="game-overlay">
+                        <div class="overlay-content">
+                            <div class="overlay-emoji">🦌</div>
+                            <h3 id="overlay-title">MOOSE ESCAPE</h3>
+                            <p id="overlay-subtitle">Help Clint & Mike run through the Alaskan wilderness!</p>
+                            <p class="overlay-controls">Press <kbd>SPACE</kbd> or <kbd>↑</kbd> to Jump &nbsp;|&nbsp; <kbd>↓</kbd> to Duck</p>
+                            <button class="btn-play" id="btn-play" onclick="startGame()">🏃 RUN FOR IT!</button>
+                        </div>
+                    </div>
+                    <div id="game-over-overlay" class="game-overlay hidden">
+                        <div class="overlay-content game-over">
+                            <div class="overlay-emoji">💀</div>
+                            <h3 id="gameover-title">TRAMPLED BY MOOSE!</h3>
+                            <p id="gameover-message">Clint & Mike are STILL stuck in Alaska...</p>
+                            <p class="gameover-score">Distance: <span id="final-score">0</span>m</p>
+                            <button class="btn-play" onclick="startGame()">🔄 TRY AGAIN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
