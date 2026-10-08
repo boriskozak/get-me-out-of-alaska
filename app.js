@@ -310,6 +310,13 @@ function generateTerrain() {
 }
 
 function handleKeyDown(e) {
+    // The game controls only apply while the game section is visible:
+    // pressing Space on the flight finder tab must not start a hidden game.
+    const gameSection = document.getElementById('game-section');
+    if (!gameSection || gameSection.classList.contains('hidden')) {
+        return;
+    }
+
     if (e.code === 'Space' || e.code === 'ArrowUp') {
         e.preventDefault();
         if (!gameState.running) {
