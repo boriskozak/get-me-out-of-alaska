@@ -246,6 +246,7 @@ const gameState = {
     score: 0,
     highScore: loadHighScore(),
     speed: 5,
+    lastSpeedHud: -1, // last speed value written to the HUD (avoid per-frame DOM writes)
     frameCount: 0,
     groundY: 320,
     gravity: 0.7,
@@ -395,6 +396,7 @@ function startGame() {
     document.getElementById('game-over-overlay').classList.add('hidden');
     document.getElementById('score').textContent = '0';
     document.getElementById('speed').textContent = '0';
+    gameState.lastSpeedHud = -1;
 
     requestAnimationFrame(gameLoop);
 }
@@ -415,10 +417,17 @@ function updateGame() {
     gameState.speed = 5 + Math.floor(gameState.frameCount / 200) * 0.5;
     if (gameState.speed > 18) gameState.speed = 18;
 
-    // Score
-    gameState.score = Math.floor(gameState.frameCount / 3);
-    document.getElementById('score').textContent = gameState.score;
-    document.getElementById('speed').textContent = Math.floor(gameState.speed * 3);
+    // Score (write to the HUD only when the displayed value changes)
+    const newScore = Math.floor(gameState.frameCount / 3);
+    if (newScore !== gameState.score) {
+        gameState.score = newScore;
+        document.getElementById('score').textContent = newScore;
+    }
+    const newSpeed = Math.floor(gameState.speed * 3);
+    if (newSpeed !== gameState.lastSpeedHud) {
+        gameState.lastSpeedHud = newSpeed;
+        document.getElementById('speed').textContent = newSpeed;
+    }
 
     // Player physics
     if (!player.grounded) {
