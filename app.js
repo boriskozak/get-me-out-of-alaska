@@ -26,8 +26,9 @@ function createSnowfall() {
 
 function setDefaultDate() {
     const dateInput = document.getElementById('date');
-    const today = new Date();
-    dateInput.value = today.toISOString().split('T')[0];
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.value = today;
+    dateInput.min = today; // no searching for flights in the past
 }
 
 // ========== NAVIGATION ==========
