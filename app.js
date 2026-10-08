@@ -222,10 +222,29 @@ function bookFlight(flightNum) {
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas ? canvas.getContext('2d') : null;
 
+// localStorage may be unavailable (private mode, sandboxed iframe) or hold
+// a corrupt value; the game must still run and display a sane high score.
+function loadHighScore() {
+    try {
+        const raw = parseInt(localStorage.getItem('mooseEscapeHighScore') || '0', 10);
+        return Number.isFinite(raw) && raw >= 0 ? raw : 0;
+    } catch {
+        return 0;
+    }
+}
+
+function saveHighScore(value) {
+    try {
+        localStorage.setItem('mooseEscapeHighScore', value.toString());
+    } catch {
+        // Storage unavailable: the high score just won't persist this session.
+    }
+}
+
 const gameState = {
     running: false,
     score: 0,
-    highScore: parseInt(localStorage.getItem('mooseEscapeHighScore') || '0'),
+    highScore: loadHighScore(),
     speed: 5,
     frameCount: 0,
     groundY: 320,
@@ -942,7 +961,7 @@ function endGame() {
     // Update high score
     if (gameState.score > gameState.highScore) {
         gameState.highScore = gameState.score;
-        localStorage.setItem('mooseEscapeHighScore', gameState.highScore.toString());
+        saveHighScore(gameState.highScore);
         document.getElementById('high-score').textContent = gameState.highScore;
     }
 
