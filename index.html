@@ -135,7 +135,7 @@
                     </div>
                 </div>
                 <div class="canvas-wrapper">
-                    <canvas id="game-canvas" width="800" height="400"></canvas>
+                    <canvas id="game-canvas" width="800" height="400" role="img" aria-label="Moose Escape game canvas: Clint and Mike run through the Alaskan wilderness, jumping over and ducking under moose, rocks, stumps, and eagles"></canvas>
                     <div id="game-overlay" class="game-overlay">
                         <div class="overlay-content">
                             <div class="overlay-emoji">🦌</div>
@@ -149,7 +149,7 @@
                         <div class="overlay-content game-over">
                             <div class="overlay-emoji">💀</div>
                             <h3 id="gameover-title">TRAMPLED BY MOOSE!</h3>
-                            <p id="gameover-message">Clint & Mike are STILL stuck in Alaska...</p>
+                            <p id="gameover-message" role="status" aria-live="polite">Clint & Mike are STILL stuck in Alaska...</p>
                             <p class="gameover-score">Distance: <span id="final-score">0</span>m</p>
                             <button class="btn-play" onclick="startGame()">🔄 TRY AGAIN</button>
                         </div>
