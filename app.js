@@ -26,7 +26,12 @@ function createSnowfall() {
 
 function setDefaultDate() {
     const dateInput = document.getElementById('date');
-    const today = new Date().toISOString().split('T')[0];
+    if (!dateInput) return;
+    // Build YYYY-MM-DD from local time, not toISOString() (UTC): in the
+    // evening in US time zones the UTC date is already tomorrow, which
+    // would set the default to tomorrow and block same-day searches.
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     dateInput.value = today;
     dateInput.min = today; // no searching for flights in the past
 }
